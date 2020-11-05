@@ -15,8 +15,6 @@ void handleRoot();
 String viewCredential();
 void handlePercent();
 void handleStatus();
-void handleGPIO();
-void sendRedirect(String uri);
 bool atDetect(IPAddress softapIP);
 void deleteAllCredentials();
 void blink();
@@ -25,7 +23,6 @@ int getAngle();
 int getMaxAngle();
 void rotate(int angle);
 
-const int ledled = 12;
 int temp_percent = 0;
 
 AutoConnect portal;
@@ -74,7 +71,6 @@ String viewCredential() {
 }
 
 
-
 void handlePercent() {
   Serial.println("percent");
   Serial.println(viewCredential());
@@ -101,24 +97,6 @@ void handleStatus() {
   portal.host().send(200, "application/json", response);
 }
 
-
-void handleGPIO() {
-  Serial.println("handleGPIO");
-  Serial.println(viewCredential());
-  WebServerClass& server = portal.host();
-  if (server.arg("v") == "low")
-    digitalWrite(ledled, LOW);
-  else if (server.arg("v") == "high")
-    digitalWrite(ledled, HIGH);
-  sendRedirect("/");
-}
-
-void sendRedirect(String uri) {
-  WebServerClass& server = portal.host();
-  server.sendHeader("Location", uri, true);
-  server.send(302, "text/plain", "");
-  server.client().stop();
-}
 
 bool atDetect(IPAddress softapIP) {
   Serial.println("Captive portal started, SoftAP IP:" + softapIP.toString());
@@ -148,7 +126,6 @@ unsigned long doublePressTime;
 int prevDoublePressState = LOW;
 int setupStatus = 0;
 bool setupLock = false;
-
 
 const int stepsPerRevolution = 200; 
 Stepper myStepper(stepsPerRevolution, 27, 25,26, 33);
@@ -192,10 +169,10 @@ void rotate(int angle) {
     int currentAngle = getAngle();
     int maxAngleLocal = getMaxAngle();
 
-    Serial.println("loh " + String((int)maxAngleLocal));
+    Serial.println("maxAngleLocal " + String((int)maxAngleLocal));
 
     if (maxAngleLocal != 0 && maxAngleLocal < currentAngle + angle) {
-      Serial.println("SOSOSOS ");
+      Serial.println("CONDITION ");
       }
     else {
       Serial.println("DEBUG " + String((int)currentAngle));
@@ -221,7 +198,6 @@ void setup() {
   Serial.println(maxAngle);
 
   Serial.println("LOOOOOAD");
-  pinMode(ledled, OUTPUT);
   pinMode(upLed, OUTPUT);
   pinMode(upButton, INPUT_PULLUP);
   debouncerUp.attach(upButton);
@@ -242,7 +218,6 @@ void setup() {
   if (portal.begin()) {
     WebServerClass& server = portal.host();
     server.on("/", handleRoot);
-    server.on("/io", handleGPIO);
     server.on("/api/blinds", handlePercent);
     server.on("/api/status", handleStatus);
     Serial.println("Started, IP:" + WiFi.localIP().toString());
