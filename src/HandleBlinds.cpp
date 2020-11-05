@@ -25,6 +25,23 @@ void rotate(int angle);
 
 int temp_percent = 0;
 
+const int upLed = 14;
+const int downLed = 13;
+const int upButton = 35;
+const int downButton = 34;
+Bounce debouncerUp = Bounce(); 
+Bounce debouncerDown = Bounce(); 
+unsigned long doublePressTime;
+int prevDoublePressState = LOW;
+int setupStatus = 0;
+bool setupLock = false;
+
+const int stepsPerRevolution = 200; 
+Stepper myStepper(stepsPerRevolution, 27, 25,26, 33);
+
+int maxAngle;
+
+
 AutoConnect portal;
 AutoConnectConfig Config; 
 
@@ -53,6 +70,7 @@ void handleRoot() {
  "var percent=Math.round((Math.abs(parentRect.height - Math.abs(elemTop))/ parentRect.height) * 100); var position=await setBlindersStatus(100 - percent); renderPosition(position);}}</script> </body></html>");
   portal.host().send(200, "text/html", page);
 }
+
 
 String viewCredential() {
   AutoConnectCredential  ac(CREDENTIAL_OFFSET);
@@ -116,22 +134,6 @@ void deleteAllCredentials() {
 }
 
 
-const int upLed = 14;
-const int downLed = 13;
-const int upButton = 35;
-const int downButton = 34;
-Bounce debouncerUp = Bounce(); 
-Bounce debouncerDown = Bounce(); 
-unsigned long doublePressTime;
-int prevDoublePressState = LOW;
-int setupStatus = 0;
-bool setupLock = false;
-
-const int stepsPerRevolution = 200; 
-Stepper myStepper(stepsPerRevolution, 27, 25,26, 33);
-
-int maxAngle;
-
 void blink() {
           digitalWrite(downLed, HIGH);
           digitalWrite(upLed, HIGH);
@@ -186,6 +188,7 @@ void rotate(int angle) {
     }
   }
 
+
 void setup() {
   Serial.begin(115200);
   Serial.println();
@@ -228,6 +231,7 @@ void setup() {
   }
 
 }
+
 
 void loop() {
   debouncerUp.update();

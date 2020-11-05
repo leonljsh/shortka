@@ -60,10 +60,10 @@
     </div>
     <script>
         function getBlindersStatus() {
-          return fetch("http://localhost:5000/api/status").then(response => response.json()).then(response=>response.position);
+          return fetch("/api/status").then(response => response.json()).then(response=>response.position);
         }
         function setBlindersStatus(percent) {
-          return fetch(`http://localhost:5000/api/blinds?open=${percent}`).then(response => response.json()).then(response=>response.position);
+          return fetch(`/api/blinds?open=${percent}`).then(response => response.json()).then(response=>response.position);
         }
         function renderPosition(position) {
           var elem = document.getElementById("window_slider_cover")
