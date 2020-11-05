@@ -103,7 +103,7 @@ void handleStatus() {
 
 
 void handleGPIO() {
-  Serial.println("qweqe");
+  Serial.println("handleGPIO");
   Serial.println(viewCredential());
   WebServerClass& server = portal.host();
   if (server.arg("v") == "low")
@@ -198,14 +198,14 @@ void rotate(int angle) {
       Serial.println("SOSOSOS ");
       }
     else {
-      Serial.println("PIDR1 " + String((int)currentAngle));
+      Serial.println("DEBUG " + String((int)currentAngle));
       myStepper.step(angle);
       currentAngle += angle;
-      Serial.println("PIDR 11 " + String((int)currentAngle));
+      Serial.println("DEBUG 11 " + String((int)currentAngle));
       EEPROM_int_write(0, currentAngle);
       int newQwe = 0;
       EEPROM.get(0, newQwe);
-      Serial.println("PIDR2 " + String((int)currentAngle) + " PIDRPIDR " + String((int)newQwe));
+      Serial.println("DEBUG2 " + String((int)currentAngle) + " DEBUGDEBUG " + String((int)newQwe));
     }
   }
 
@@ -236,7 +236,7 @@ void setup() {
 
 //  Config.autoReconnect = true;
   Config.apid = "markusik";
-  Config.psk = "gb3141828";
+  Config.psk = "bentcoyote80";
   portal.config(Config);
   portal.onDetect(atDetect);
   if (portal.begin()) {
