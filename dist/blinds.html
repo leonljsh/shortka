@@ -88,22 +88,22 @@
   
           var parent = document.getElementById("window_slider_parent");
           parent.onmousedown = dragMouseDown;
-          parent.addEventListener('touchstart', dragMouseDown);
+          parent.addEventListener('touchstart', dragMouseDown, {passive: false});
 
           function dragMouseDown(e) {
+            e.preventDefault && e.preventDefault();
             e = (e.targetTouches && e.targetTouches[0]) || e || window.event;
-            if (e instanceof MouseEvent) e.preventDefault();
             pos2 = e.clientY;
             document.onmouseup = closeDragElement;
             document.onmousemove = elementDrag;
 
-            document.addEventListener('touchmove', elementDrag);
-            document.addEventListener('touchend', closeDragElement);
+            document.addEventListener('touchmove', elementDrag, {passive: false});
+            document.addEventListener('touchend', closeDragElement, {passive: false});
           }
 
           function elementDrag(e) {
+            e.preventDefault && e.preventDefault();
             e = (e.targetTouches && e.targetTouches[0]) || e || window.event;
-            if (e instanceof MouseEvent) e.preventDefault();
 
             pos1 = pos2 - e.clientY;
             pos2 = e.clientY;
