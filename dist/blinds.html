@@ -60,7 +60,7 @@
     </div>
     <script>
         function getBlindersStatus() {
-          return fetch("/api/status").then(response => response.json()).then(response=>response.position);
+          return fetch('/api/status').then(response => response.json()).then(response=>response.position);
         }
         function setBlindersStatus(percent) {
           return fetch(`/api/blinds?open=${percent}`).then(response => response.json()).then(response=>response.position);
@@ -74,8 +74,8 @@
           elem.style.top = `-${position * (parentRect.height/100)}px`
         }
   
-        document.addEventListener("DOMContentLoaded", async function () {
-          var elem = document.getElementById("window_slider_cover")
+        document.addEventListener('DOMContentLoaded', async function () {
+          var elem = document.getElementById('window_slider_cover')
           dragElement(elem);
   
           var position = await getBlindersStatus();
@@ -86,7 +86,7 @@
           var pos1 = 0;
           var pos2 = 0;
   
-          var parent = document.getElementById("window_slider_parent");
+          var parent = document.getElementById('window_slider_parent');
           parent.onmousedown = dragMouseDown;
           parent.addEventListener('touchstart', dragMouseDown, {passive: false});
 
@@ -114,12 +114,11 @@
               parentRect.y >= elemRect.y - pos1 &&
               parentRect.top <= elemRect.bottom - pos1
             ) {
-              elmnt.style.top = elmnt.offsetTop - pos1 + "px";
+              elmnt.style.top = `${elmnt.offsetTop - pos1}px`;
             }
           }
   
           async function closeDragElement() {
-            /* stop moving when mouse button is released:*/
             document.onmouseup = null;
             document.onmousemove = null;
 

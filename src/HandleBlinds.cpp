@@ -57,17 +57,14 @@ void handleRoot() {
 "<body><div class=\"menu\">" AUTOCONNECT_LINK(BAR_32) "</div>"
   "<div class=\"window_slider_container\"> <div id=\"window_slider_parent\"> <div id=\"window_slider_cover\"></div></div>"
 "<span class=\"percent_value\" id=\"precent_value_id\"></span> <span class=\"error\" id=\"error_block\"></span> </div>"
-"<script>function getBlindersStatus(){return fetch(\"/api/status\").then(response=> response.json()).then(response=>response.position);}"
-"function setBlindersStatus(percent){return fetch(`/api/blinds?open=${percent}`).then(response=> response.json()).then(response=>response.position);}"
-"function renderPosition(position){var elem=document.getElementById(\"window_slider_cover\"); var span_percent=document.getElementById(\"precent_value_id\"); var parentRect=document.getElementById(\"window_slider_parent\").getBoundingClientRect(); span_percent.textContent=`Open Percent ${position}%`; elem.style.top=`-${position * (parentRect.height/100)}px`}"
-"document.addEventListener(\"DOMContentLoaded\", async function (){var elem=document.getElementById(\"window_slider_cover\"); dragElement(elem); var position=await getBlindersStatus(); renderPosition(position);}); "
-"function dragElement(elmnt){var pos1=0, pos2=0; var parent=document.getElementById(\"window_slider_parent\"); document.getElementById( \"window_slider_parent\" ).onmousedown=dragMouseDown; "
- " function dragMouseDown(e){e=e || window.event; e.preventDefault();pos2=e.clientY; document.onmouseup=closeDragElement; document.onmousemove=elementDrag; document.touchend = closeDragElement; document.touchmove = elementDrag; document.touchstart = elementDrag;}"
- " function elementDrag(e){e=e || window.event; e.preventDefault(); pos1=pos2 - e.clientY; pos2=e.clientY;"
- "var parentRect=parent.getBoundingClientRect(); var elemRect=elmnt.getBoundingClientRect(); if ( parentRect.y >=elemRect.y - pos1 && parentRect.top <=elemRect.bottom - pos1 ){elmnt.style.top=elmnt.offsetTop - pos1 + \"px\";}}"
- "async function closeDragElement(){document.onmouseup=null; document.onmousemove=null; "
- "var parentRect=parent.getBoundingClientRect(); var elemRect=elmnt.getBoundingClientRect(); var elemTop=parseInt(window.getComputedStyle(elmnt).top);" 
- "var percent=Math.round((Math.abs(parentRect.height - Math.abs(elemTop))/ parentRect.height) * 100); var position=await setBlindersStatus(100 - percent); renderPosition(position);}}</script> </body></html>");
+"<script>function getBlindersStatus(){return fetch(\"/api/status\").then(e=>e.json()).then(e=>e.position)}function setBlindersStatus(e){return fetch(`/api/blinds?open=${e}`).then(e=>e.json()).then(e=>e.position)}"
+"function renderPosition(e){var t=document.getElementById(\"window_slider_cover\"),n=document.getElementById(\"precent_value_id\"),o=document.getElementById(\"window_slider_parent\").getBoundingClientRect();n.textContent=`Open Percent ${e}%`,t.style.top=`-${e*(o.height/100)}px`}"
+"function dragElement(e){var t=0,n=0,o=document.getElementById(\"window_slider_parent\");"
+  "function i(e){e.preventDefault&&e.preventDefault(),e=e.targetTouches&&e.targetTouches[0]||e||window.event,n=e.clientY,document.onmouseup=u,document.onmousemove=d,document.addEventListener(\"touchmove\",d,{passive:!1}),document.addEventListener(\"touchend\",u,{passive:!1})}"
+  "function d(i){i.preventDefault&&i.preventDefault(),i=i.targetTouches&&i.targetTouches[0]||i||window.event,t=n-i.clientY,n=i.clientY;var d=o.getBoundingClientRect(),u=e.getBoundingClientRect();d.y>=u.y-t&&d.top<=u.bottom-t&&(e.style.top=`${e.offsetTop-t}px`)}"
+  "async function u(){document.onmouseup=null,document.onmousemove=null;var t=o.getBoundingClientRect(),n=(e.getBoundingClientRect(),parseInt(window.getComputedStyle(e).top)),i=Math.round(Math.abs(t.height-Math.abs(n))/t.height*100);"
+      "renderPosition(await setBlindersStatus(100-i))}o.onmousedown=i,o.addEventListener(\"touchstart\",i,{passive:!1})}"
+"document.addEventListener(\"DOMContentLoaded\",async function(){dragElement(document.getElementById(\"window_slider_cover\")),renderPosition(await getBlindersStatus())});</script> </body></html>");
   portal.host().send(200, "text/html", page);
 }
 
